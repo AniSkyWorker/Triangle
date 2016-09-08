@@ -4,13 +4,14 @@
 #include "stdafx.h"
 #include <string>
 #include <iostream>
+#include <algorithm>
 
 using namespace std;
 
 class CIncorrectInputError : public runtime_error
 {
 public:
-	CIncorrectInputError() : runtime_error("Одна из введенных длин - некорректна!") {};
+	CIncorrectInputError() : runtime_error("Ошибка:Одна из введенных длин - некорректна!") {};
 };
 
 class CNonTriangleError: public runtime_error
@@ -28,10 +29,17 @@ public:
 	string GetType()
 	{
 		CheckSidesCorrectness();
+		auto sum = m_fSideLen + m_sSideLen + m_tSideLen;
+		auto sideWithMaxLen = max({ m_fSideLen, m_sSideLen, m_tSideLen });
 
-		return ((m_fSideLen + m_sSideLen + m_tSideLen) / 3.f) == m_fSideLen ? "Равносторонний"
+		if ((sum - sideWithMaxLen) <= sideWithMaxLen)
+		{
+			throw CNonTriangleError();
+		}
+
+		return (m_fSideLen == m_sSideLen) && (m_fSideLen == m_tSideLen) ? "Равносторонний"
 			: ((m_fSideLen == m_sSideLen) || (m_tSideLen == m_fSideLen) || (m_sSideLen == m_tSideLen)) ? "Равнобедренный"
-			: "Разносторонний";
+			: "Обычный";
 	}
 
 private:
@@ -62,7 +70,7 @@ int main(int argc, char* argv[])
 
 	if (argc < 4)
 	{
-		cout << "Usage: triangle.exe firstSide secondSide ThirdSide";
+		cout << "Формат ввода: triangle.exe firstSide secondSide ThirdSide";
 	}
 	else
 	{
@@ -78,7 +86,7 @@ int main(int argc, char* argv[])
 		}
 		catch (...)
 		{
-			std::cout << "Одна из введенных длин - некорректна";
+			std::cout << "Ошибка: Одна из введенных длин - некорректна!";
 		}
 	}
     return 1;
