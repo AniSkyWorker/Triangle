@@ -8,10 +8,18 @@
 
 using namespace std;
 
+namespace
+{
+	void ReplaceDot(string & str)
+	{
+		replace_if(str.begin(), str.end(), [](char a){ return a == '.'; }, ',');
+	}
+}
+
 class CIncorrectInputError : public runtime_error
 {
 public:
-	CIncorrectInputError() : runtime_error("ќшибка:ќдна из введенных длин - некорректна!") {};
+	CIncorrectInputError() : runtime_error("ќшибка: ѕереданы неккоректные аргументы!") {};
 };
 
 class CNonTriangleError: public runtime_error
@@ -23,7 +31,7 @@ public:
 class CTriangle
 {
 public:
-	CTriangle(int fSideLen, int sSideLen, int tSiedLen)
+	CTriangle(float fSideLen, float sSideLen, float tSiedLen)
 		: m_fSideLen(fSideLen), m_sSideLen(sSideLen), m_tSideLen(tSiedLen) {};
 
 	string GetType()
@@ -59,9 +67,9 @@ private:
 		}
 	}
 
-	int m_fSideLen;
-	int m_sSideLen;
-	int m_tSideLen;
+	float m_fSideLen;
+	float m_sSideLen;
+	float m_tSideLen;
 };
 
 int main(int argc, char* argv[])
@@ -70,13 +78,20 @@ int main(int argc, char* argv[])
 
 	if (argc < 4)
 	{
-		cout << "‘ормат ввода: triangle.exe firstSide secondSide ThirdSide";
+		cout << "‘ормат ввода: triangle.exe длинаѕервой—тороны длина¬торой—тороны длина“ретьей—тороны";
 	}
 	else
 	{
 		try
 		{
-			CTriangle triangle(stoi(argv[1]), stoi(argv[2]), stoi(argv[3]));
+			string first = argv[1];
+			string second = argv[2];
+			string third = argv[3];
+			ReplaceDot(first);
+			ReplaceDot(second);
+			ReplaceDot(third);
+
+			CTriangle triangle(stof(first), stof(second), stof(third));
 			std::cout << triangle.GetType();
 			return 0;
 		}
@@ -86,7 +101,7 @@ int main(int argc, char* argv[])
 		}
 		catch (...)
 		{
-			std::cout << "ќшибка: ќдна из введенных длин - некорректна!";
+			std::cout << "ќшибка: ѕереданы неккоректные аргументы!";
 		}
 	}
     return 1;
