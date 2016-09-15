@@ -8,25 +8,34 @@
 
 using namespace std;
 
-namespace
-{
-	void ReplaceDot(string & str)
-	{
-		replace_if(str.begin(), str.end(), [](char a){ return a == '.'; }, ',');
-	}
-}
-
 class CIncorrectInputError : public runtime_error
 {
 public:
 	CIncorrectInputError() : runtime_error("Ошибка: Переданы неккоректные аргументы!") {};
 };
 
-class CNonTriangleError: public runtime_error
+class CNonTriangleError : public runtime_error
 {
 public:
 	CNonTriangleError() : runtime_error("Не треугольник") {};
 };
+
+namespace
+{
+	void ReplaceDot(string & str)
+	{
+		int	dtNumeric = 0;
+		replace_if(str.begin(), str.end(), [](char a) { return a == '.'; }, ',');
+		if (find_if(str.begin(), str.end(), [&str, &dtNumeric](auto s)
+		{ 
+			if (s == ',') if (s == *str.begin() || s == *(str.end() - 1)) throw CIncorrectInputError(); else dtNumeric++;
+			return (s > '9' || s < '0') && (s != ',' || dtNumeric  > 1);
+		}) != str.end())
+		{
+			throw CIncorrectInputError();
+		}
+	}
+}
 
 class CTriangle
 {

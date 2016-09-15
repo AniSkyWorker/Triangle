@@ -27,7 +27,34 @@ triangle.exe 1 0 1
 IF NOT ERRORLEVEL 1 GOTO err
 
 triangle.exe 1,2 1,3 0,1
-IF NOT ERRORLEVEL 1 GOTO errq
+IF NOT ERRORLEVEL 1 GOTO err
+
+triangle.exe 1E 1WW 1.3
+IF NOT ERRORLEVEL 1 GOTO err
+
+triangle.exe 1W E3R 3.4
+IF NOT ERRORLEVEL 1 GOTO err
+
+triangle.exe . . .
+IF NOT ERRORLEVEL 1 GOTO err
+
+triangle.exe , E, 3,4
+IF NOT ERRORLEVEL 1 GOTO err
+
+triangle.exe  ,5 3 3,4
+IF NOT ERRORLEVEL 1 GOTO err
+                            
+triangle.exe 5, 3 4,4
+IF NOT ERRORLEVEL 1 GOTO err
+
+triangle.exe  , 3 3,4
+IF NOT ERRORLEVEL 1 GOTO err
+
+triangle.exe  3,, 3 3,4
+IF NOT ERRORLEVEL 1 GOTO err
+
+triangle.exe  3,4, 3 3,4
+IF NOT ERRORLEVEL 1 GOTO err
 
 SET firstType=Обычный
 SET secondType=Равносторонний
@@ -52,6 +79,9 @@ FOR /f %%i IN ('triangle.exe 2 3 2') DO SET result=%%i
 IF NOT "%result%" == "%thirdType%" GOTO err
 
 FOR /f %%i IN ('triangle.exe "1,1" "1,1" "1,1"') DO SET result=%%i
+IF NOT "%result%" == "%secondType%" GOTO err
+
+FOR /f %%i IN ('triangle.exe "1.1" "1.1" "1.1"') DO SET result=%%i
 IF NOT "%result%" == "%secondType%" GOTO err
 
 ECHO Program testing succeeded :-) 
